@@ -610,9 +610,11 @@ nandroid_back_exe()
     	// get timestamp for nandroid
     	if (t->tm_hour > 12) {
 		sprintf(timestamp,"%02d-%02d-%d_%d-%02dpm",t->tm_mon+1, t->tm_mday,t->tm_year+1900,(t->tm_hour - 12),t->tm_min); 
-   	 } else if (t->tm_hour == 00) {
+   	} else if (t->tm_hour == 00) {
 		sprintf(timestamp,"%02d-%02d-%d_%02d-%02dam",t->tm_mon+1,t->tm_mday,t->tm_year+1900,(t->tm_hour + 12),t->tm_min);
-   	 } else {
+   	} else if (t->tm_hour == 12) {
+		sprintf(timestamp,"%02d-%02d-%d_%02d-%02dpm",t->tm_mon+1,t->tm_mday,t->tm_year+1900,t->tm_hour,t->tm_min);
+	} else {
 		sprintf(timestamp,"%02d-%02d-%d_%d-%02dam",t->tm_mon+1,t->tm_mday,t->tm_year+1900,t->tm_hour,t->tm_min);
     	}
 

@@ -638,9 +638,9 @@ format_menu()
 	#define ITEM_FORMAT_SDEXT	4
 	#define ITEM_FORMAT_BACK        5
 	
-	char* part_headers[] = {    "Format Menu",
-                                "Choose a Partition to Format: ",
-                                NULL };
+	char* part_headers[] = { "Format Menu",
+                                 "Choose a Partition to Format: ",
+                                 NULL };
 	
     	char* part_items[] = { "Format SYSTEM (/system)",
                                "Format DATA (/data)",
@@ -743,6 +743,8 @@ print_batt_cap()  {
 		sprintf(full_cap_a, "Battery Level : %i%% @ %d:%02d pm", cap_i, (current->tm_hour - 12), current->tm_min);
 	} else if (current->tm_hour == 00) {
 		sprintf(full_cap_a, "Battery Level : %i%% @ %02d:%02d am", cap_i, (current->tm_hour + 12), current->tm_min);
+	} else if (current->tm_hour == 12) {
+		sprintf(full_cap_a, "Battery Level : %i%% @ %02d:%02d pm", cap_i, current->tm_hour, current->tm_min);
 	} else {
 		sprintf(full_cap_a, "Battery Level : %i%% @ %d:%02d am", cap_i, current->tm_hour, current->tm_min);
 	}	
