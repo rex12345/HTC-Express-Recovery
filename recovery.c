@@ -400,8 +400,8 @@ prepend_title(const char** headers) {
 		      "Based on TWRP v1.0.3",
 		      "Ported by lovethyEVO",
 		      "", 
-		      //print_batt_cap(),
-		      //"",
+		      print_batt_cap(),
+		      "",
                       NULL };
 
     // count the number of lines in our title, plus the
