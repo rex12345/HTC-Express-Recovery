@@ -400,8 +400,8 @@ prepend_title(const char** headers) {
 		      "Based on TWRP v1.0.3",
 		      "Ported by lovethyEVO",
 		      "", 
-		      print_batt_cap(),
-		      "",
+		      //print_batt_cap(),
+		      //"",
                       NULL };
 
     // count the number of lines in our title, plus the
@@ -681,23 +681,25 @@ wipe_data(int confirm) {
     device_wipe_data();
     erase_volume("/data");
     erase_volume("/cache");
+    ensure_path_mounted(SDCARD_INT);
     struct stat st;
-    if (stat("/sd-ext",&st) == 0)
+    if (stat("/internal_sdcard/sd-ext",&st) == 0)
     {
         ui_print("Formatting /sd-ext...\n");
-        __system("rm -rf /sd-ext/* && rm -rf /sd-ext/.*");
+        __system("rm -rf /internal_sdcard/sd-ext/* && rm -rf /internal_sdcard/sd-ext/.*");
     } else {
         ui_print("/sd-ext not found, skipping...\n");
     }
     if (0 == stat("/internal_sdcard/.android_secure", &st))
     {
         __system("rm -rf /internal_sdcard/.android_secure/* && rm -rf /internal_sdcard/.android_secure/.*");
-        ui_print("Formatting /internal_sdcard/.android_secure...\n");
+        ui_print("Formatting /.android_secure...\n");
     } else {
-        ui_print("/internal_sdcard/.android_secure not found, skipping...\n");
+        ui_print("/.android_secure not found, skipping...\n");
     }
 	ui_reset_progress();
     ui_print("-- Data wipe complete.\n");
+    ensure_path_unmounted(SDCARD_INT);
 }
 
 
