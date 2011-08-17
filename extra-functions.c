@@ -427,20 +427,22 @@ void wipe_dalvik_cache()
         __system("rm -rf /cache/dc");
         ui_print("Cleaned: /cache/dc\n");
 
+        ensure_path_mounted(SDCARD_INT);
         struct stat st;
         if (0 != stat(sde.blk, &st))
         {
             ui_print("/sd-ext not present, skipping\n");
         } else {
-        	__system("mount /sd-ext");
+        	__system("mount /internal_sdcard/sd-ext");
     	    LOGI("Mounting /sd-ext\n");
-    	    if (stat("/sd-ext/dalvik-cache",&st) == 0)
+    	    if (stat("/internal_sdcard/sd-ext/dalvik-cache",&st) == 0)
     	    {
-                __system("rm -rf /sd-ext/dalvik-cache");
+                __system("rm -rf /internal_sdcard/sd-ext/dalvik-cache");
         	    ui_print("Cleaned: /sd-ext/dalvik-cache...\n");
     	    }
         }
         ensure_path_unmounted("/data");
+	ensure_path_unmounted(SDCARD_INT);
         ui_print("-- Dalvik Cache Directories Wipe Complete!\n\n");
         ui_set_background(BACKGROUND_ICON_MAIN);
         if (!ui_text_visible()) return;
@@ -629,11 +631,9 @@ format_menu()
 {
 	struct stat st;
 	
-	//#define ITEM_FORMAT_ALL		0
 	#define ITEM_FORMAT_SYSTEM      0
 	#define ITEM_FORMAT_DATA        1
 	#define ITEM_FORMAT_CACHE       2
-	//#define ITEM_FORMAT_BOOT        4
 	#define ITEM_FORMAT_SDCARD      3
 	#define ITEM_FORMAT_SDEXT	4
 	#define ITEM_FORMAT_BACK        5
@@ -652,6 +652,7 @@ format_menu()
 
     	char** headers = prepend_title(part_headers);
     
+   	ensure_path_mounted(SDCARD_INT);
     	inc_menu_loc(ITEM_FORMAT_BACK);
 	for (;;)
 	{
@@ -674,10 +675,10 @@ format_menu()
             		case ITEM_FORMAT_SDEXT:
 				if (stat(sde.blk,&st) == 0)
             			{
-                			__system("mount /sdcard/sd-ext");
-                    			confirm_format("SD-EXT", "/sd-ext");
+                			__system("mount /internal_sdcard/sd-ext");
+                    			confirm_format("SD-EXT", "/internal_sdcard/sd-ext");
             			} else {
-            				ui_print("\n/sdcard/sd-ext not detected! Aborting.\n");
+            				ui_print("\n/sd-ext not detected! Aborting.\n");
             			}
 				break;
 			case ITEM_FORMAT_BACK:
@@ -691,6 +692,7 @@ format_menu()
 	        	return;
 	    	}
 	}
+	ensure_path_unmounted(SDCARD_INT);
 }
 
 void
@@ -1214,6 +1216,7 @@ void chkMounts()
 char* isMounted(int mInt)
 {
 	int isTrue = 0;
+	ensure_path_mounted(SDCARD_INT);
 	struct stat st;
 	char* tmp_set = (char*)malloc(25);
 	if (mInt == MNT_SYSTEM)
@@ -1339,10 +1342,10 @@ void mount_menu(int pIdx)
 				if (sdeIsMounted == 0)
 				{
 					__system("mount /internal_sdcard/sd-ext");
-					ui_print("/internal_sdcard/sd-ext has been mounted.\n");
+					ui_print("/sd-ext has been mounted.\n");
 				} else if (sdeIsMounted == 1) {
 					__system("umount /internal_sdcard/sd-ext");
-					ui_print("/internal_sdcard/sd-ext has been unmounted.\n");
+					ui_print("/sd-ext has been unmounted.\n");
 				}
 				break;
 			case MNT_BACK:
@@ -1379,10 +1382,11 @@ void main_wipe_menu()
     	char** headers = prepend_title(MENU_MAIN_WIPE_HEADERS);
 
     	int isSdExt = 0;
+	ensure_path_mounted(SDCARD_INT);
     	struct stat st;
-    	if (stat("/sd-ext",&st) == 0)
+    	if (stat("/internal_sdcard/sd-ext",&st) == 0)
     	{
-    		__system("mount /sd-ext");
+    		__system("mount /internal_sdcard/sd-ext");
     		isSdExt = 1;
     	}
     
@@ -1431,6 +1435,7 @@ void main_wipe_menu()
         dec_menu_loc();
         ui_set_background(BACKGROUND_ICON_MAIN);
 	main_wipe_menu();
+	ensure_path_unmounted(SDCARD_INT);
 }
 
 char* toggle_spam()
