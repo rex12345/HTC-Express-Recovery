@@ -376,7 +376,7 @@ nan_restore_menu(int pIdx)
 				tw_nan_system_x = 0;
         		tw_total--;
 			}
-            break;
+            		break;
 		case ITEM_NAN_DATA:
 			if (tw_nan_data_x == 0)
 			{
@@ -450,7 +450,7 @@ nan_restore_menu(int pIdx)
 		case ITEM_NAN_BACK - 1:
         		dec_menu_loc();
 			return;
-		}
+	    }
 	    if (go_home) { 
 	        dec_menu_loc();
 	        return;
@@ -698,6 +698,8 @@ nandroid_back_exe()
 			ui_print("-->Done!\n");
 			ui_reset_progress();
 
+			tmpTtime = ((time(0) - nan_ctime) + 0.0);
+
 			if (tmpTtime >= 61.0) {
 				ui_print("Backed up %s in %.2f minutes\n\n", sys.mnt, (tmpTtime / 60.0));
 			} else {
@@ -740,6 +742,7 @@ nandroid_back_exe()
 				ui_reset_progress();
 				
 				tmpTtime = ((time(0) - nan_ctime) + 0.0);
+
 				if (tmpTtime >= 61.0) {
 					ui_print("Backed up %s in %.2f minutes\n\n", dat.mnt, (tmpTtime / 60.0));
 				} else {
